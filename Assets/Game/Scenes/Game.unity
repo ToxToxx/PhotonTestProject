@@ -342,6 +342,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1637121087}
   - component: {fileID: 1637121088}
+  - component: {fileID: 1637121089}
   m_Layer: 0
   m_Name: PhotonLauncher
   m_TagString: Untagged
@@ -376,6 +377,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3f810325c49ba684ca863130034a2bfc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &1637121089
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1637121086}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a523643a178beb54d810123658738c7d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  maxPlayersPerRoom: 2
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
