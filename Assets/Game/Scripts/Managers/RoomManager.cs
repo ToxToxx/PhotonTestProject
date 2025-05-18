@@ -6,11 +6,15 @@ namespace Game
 {
     public class RoomManager : MonoBehaviourPunCallbacks
     {
+        [Header("Photon Settings")]
         [SerializeField] private byte maxPlayersPerRoom = 4;
 
-        void Start()
+        [Header("Prefabs")]
+        [Tooltip("Перетащите сюда ваш PlayerPrefab из проекта")]
+        [SerializeField] private GameObject playerPrefab;
+
+        private void Start()
         {
-            // Убеждаемся, что соединение установлено
             if (PhotonNetwork.IsConnected)
             {
                 JoinRandomRoom();
@@ -23,7 +27,6 @@ namespace Game
 
         public override void OnConnectedToMaster()
         {
-            // После подключения – сразу пытаемся зайти в комнату
             JoinRandomRoom();
         }
 
@@ -49,9 +52,24 @@ namespace Game
 
         public override void OnJoinedRoom()
         {
-            Debug.Log("Зашли в комнату: " + PhotonNetwork.CurrentRoom.Name +
-                      $" (Игроков в комнате: {PhotonNetwork.CurrentRoom.PlayerCount})");
-            // Здесь можно инстанцировать игрока и перейти к следующему этапу
+            Debug.Log($"Зашли в комнату: {PhotonNetwork.CurrentRoom.Name} " +
+                      $"(Игроков в комнате: {PhotonNetwork.CurrentRoom.PlayerCount})");
+            SpawnPlayer();
+        }
+
+        private void SpawnPlayer()
+        {
+            Vector3 spawnPos = new Vector3(
+                Random.Range(-2f, 2f),
+                1f,
+                Random.Range(-2f, 2f)
+            );
+
+            PhotonNetwork.Instantiate(
+                playerPrefab.name,
+                spawnPos,
+                Quaternion.identity
+            );
         }
     }
 }
