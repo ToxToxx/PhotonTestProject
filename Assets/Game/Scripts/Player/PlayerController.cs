@@ -7,15 +7,15 @@ namespace Game
     [RequireComponent(typeof(PhotonView))]
     public class PlayerController : MonoBehaviourPun
     {
-        [SerializeField] private float moveSpeed = 5f;
-        private Rigidbody rb;
+        [SerializeField] private float _moveSpeed = 5f;
+        private Rigidbody _playerRb;
 
-        void Awake()
+        private void Awake()
         {
-            rb = GetComponent<Rigidbody>();
+            _playerRb = GetComponent<Rigidbody>();
         }
 
-        void Update()
+        private void Update()
         {
             // Управляем только своим игроком
             if (!photonView.IsMine) return;
@@ -23,9 +23,9 @@ namespace Game
             float h = Input.GetAxis("Horizontal");
             float v = Input.GetAxis("Vertical");
             Vector3 dir = new Vector3(h, 0f, v).normalized;
-            Vector3 move = dir * moveSpeed * Time.deltaTime;
+            Vector3 move = dir * _moveSpeed * Time.deltaTime;
 
-            rb.MovePosition(rb.position + move);
+            _playerRb.MovePosition(_playerRb.position + move);
         }
     }
 }

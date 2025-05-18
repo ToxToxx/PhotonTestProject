@@ -7,11 +7,11 @@ namespace Game
     public class RoomManager : MonoBehaviourPunCallbacks
     {
         [Header("Photon Settings")]
-        [SerializeField] private byte maxPlayersPerRoom = 4;
+        [SerializeField] private byte _maxPlayersPerRoom = 4;
 
         [Header("Prefabs")]
         [Tooltip("Перетащите сюда ваш PlayerPrefab из проекта")]
-        [SerializeField] private GameObject playerPrefab;
+        [SerializeField] private GameObject _playerPrefab;
 
         private void Start()
         {
@@ -41,7 +41,7 @@ namespace Game
             Debug.Log("Не удалось найти свободную комнату, создаём новую...");
             PhotonNetwork.CreateRoom(
                 roomName: null,
-                roomOptions: new RoomOptions { MaxPlayers = maxPlayersPerRoom }
+                roomOptions: new RoomOptions { MaxPlayers = _maxPlayersPerRoom }
             );
         }
 
@@ -66,7 +66,7 @@ namespace Game
             );
 
             PhotonNetwork.Instantiate(
-                playerPrefab.name,
+                _playerPrefab.name,
                 spawnPos,
                 Quaternion.identity
             );
