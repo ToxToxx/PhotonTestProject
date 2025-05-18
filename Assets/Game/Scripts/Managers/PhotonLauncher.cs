@@ -27,6 +27,9 @@ namespace Game
                 PhotonNetwork.NickName = "Player" + Random.Range(1000, 9999);
 
             PhotonNetwork.ConnectUsingSettings();
+            PhotonNetwork.SerializationRate = 20;    // пакетов состояния в секунду
+            PhotonNetwork.SendRate = 20;             // общих сетевых пакетов в секунду
+
         }
 
         public override void OnConnectedToMaster()

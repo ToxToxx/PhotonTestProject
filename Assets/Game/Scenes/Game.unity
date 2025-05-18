@@ -2828,6 +2828,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _maxPlayersPerRoom: 4
   _playerPrefab: {fileID: 932535484313378230, guid: 0ff6da4de16b81f42990f5b3bf7ce0e9, type: 3}
+  _manualSpawnCount: 2
 --- !u!1 &1906902296
 GameObject:
   m_ObjectHideFlags: 0

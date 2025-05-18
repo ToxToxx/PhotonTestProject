@@ -13,6 +13,10 @@ namespace Game
         [Tooltip("Перетащите сюда ваш PlayerPrefab из проекта")]
         [SerializeField] private GameObject _playerPrefab;
 
+        [Header("Debug Spawn")]
+        [Tooltip("Сколько раз вызвать SpawnPlayer() вручную")]
+        [SerializeField] private int _manualSpawnCount = 1;
+
         private void Start()
         {
             if (PhotonNetwork.IsConnected)
@@ -70,6 +74,13 @@ namespace Game
                 spawnPos,
                 Quaternion.identity
             );
+        }
+
+        [ContextMenu("Spawn Multiple Players")]
+        private void SpawnMultiple()
+        {
+            for (int i = 0; i < _manualSpawnCount; i++)
+                SpawnPlayer();
         }
     }
 }
