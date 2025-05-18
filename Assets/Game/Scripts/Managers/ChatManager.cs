@@ -10,10 +10,10 @@ namespace Game
     public class ChatManager : MonoBehaviourPun
     {
         [Header("UI References")]
-        [SerializeField] private RectTransform _contentTransform;     // Content ScrollView
-        [SerializeField] private GameObject _messageItemPrefab;      // ChatMessageItem prefab
-        [SerializeField] private TMP_InputField _inputField;         // ChatInputField (TMP)
-        [SerializeField] private Button _sendButton;                 // SendButton
+        [SerializeField] private RectTransform _contentTransform;     
+        [SerializeField] private GameObject _messageItemPrefab;     
+        [SerializeField] private TMP_InputField _inputField;      
+        [SerializeField] private Button _sendButton;                 
 
         private void Awake()
         {
@@ -54,7 +54,6 @@ namespace Game
             if (_messageItemPrefab == null || _contentTransform == null) return;
 
             var go = Instantiate(_messageItemPrefab, _contentTransform);
-            // Ищем TMP_Text на корневом или в потомках
             var tmp = go.GetComponent<TMP_Text>() ?? go.GetComponentInChildren<TMP_Text>();
             if (tmp == null)
             {
