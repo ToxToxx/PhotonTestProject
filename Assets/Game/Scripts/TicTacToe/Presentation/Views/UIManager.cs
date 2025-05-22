@@ -9,28 +9,28 @@ namespace TicTacToeGame.Presentation.Views
         [SerializeField] private TextMeshProUGUI statusText;
 
         public void ShowConnecting() =>
-            statusText.text = "🔄 Подключение к серверу...";
+            statusText.text = "Connecting...";
 
         public void ShowWaitingForOpponent() =>
-            statusText.text = "⌛ Ожидание второго игрока...";
+            statusText.text = "Waiting...";
 
         public void ShowGameStarted(PlayerMark localMark) =>
-            statusText.text = $"✅ Игра началась! Ты — {localMark}. Ходит X.";
+            statusText.text = $"Game begin! You — {localMark}. Turn X.";
 
         public void ShowYourTurn() =>
-            statusText.text = "🎯 Твой ход";
+            statusText.text = "Your turn";
 
         public void ShowOpponentTurn() =>
-            statusText.text = "🕹️ Ход противника";
+            statusText.text = "Enemy turn";
 
         public void ShowWin() =>
-            statusText.text = "🎉 Ты победил!";
+            statusText.text = "You won";
 
         public void ShowLoss() =>
-            statusText.text = "😞 Ты проиграл.";
+            statusText.text = "You lose";
 
         public void ShowDraw() =>
-            statusText.text = "🤝 Ничья.";
+            statusText.text = "Draw.";
 
 
     }

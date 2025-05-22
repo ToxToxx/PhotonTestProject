@@ -727,10 +727,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1225639090}
     m_Modifications:
-    - target: {fileID: 170414915687325411, guid: 8d21df6dc09ad3c4b89a0e5260cb66c7, type: 3}
-      propertyPath: m_text
-      value: O
-      objectReference: {fileID: 0}
     - target: {fileID: 6426025660791413720, guid: 8d21df6dc09ad3c4b89a0e5260cb66c7, type: 3}
       propertyPath: CellIndex
       value: 1
@@ -1700,8 +1696,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 260.84436, y: -121.51251}
-  m_SizeDelta: {x: 421.6887, y: 193.025}
+  m_AnchoredPosition: {x: 369.35815, y: -121.51251}
+  m_SizeDelta: {x: 650, y: 193.025}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1568818126
 MonoBehaviour:
@@ -1723,7 +1719,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: New Text
+  m_text: CONNECTING...
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 0161d805a3764c089bef00bfe00793f5, type: 2}
   m_sharedMaterial: {fileID: 2147374, guid: 0161d805a3764c089bef00bfe00793f5, type: 2}
@@ -1750,8 +1746,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 25
-  m_fontSizeBase: 25
+  m_fontSize: 55
+  m_fontSizeBase: 55
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
