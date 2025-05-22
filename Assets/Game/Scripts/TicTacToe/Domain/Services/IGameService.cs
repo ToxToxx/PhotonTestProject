@@ -9,6 +9,10 @@ namespace TicTacToeGame.Domain.Services
         event Action OnGameStart;
         event Action<int, PlayerMark> OnMoveProcessed;
         event Action<PlayerMark?> OnGameEnd; // null = draw
+
+
+        public bool IsGameActive();
+
         void Initialize(PlayerMark localMark);
         void MakeMove(int cellIndex);
         void ProcessRemoteMove(int cellIndex, PlayerMark mark);

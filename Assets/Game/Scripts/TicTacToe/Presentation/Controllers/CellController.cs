@@ -15,23 +15,18 @@ namespace TicTacToeGame.Presentation.Controllers
         {
             gameController = controller;
 
-            // При клике делаем ход и сразу обновляем статус
             view.Button.onClick.AddListener(() =>
             {
                 gameService.MakeMove(view.CellIndex);
                 gameController.UpdateTurnStatusExternal();
             });
 
-            // Показываем метку на клетке после хода
             gameService.OnMoveProcessed += (idx, mark) =>
             {
                 if (idx == view.CellIndex)
                     view.DisplayMark(mark);
-
-                // Тут не надо обновлять статус — это делает GameController
             };
 
-            // Передача хода по сети только если локальный игрок
             gameService.OnMoveProcessed += (idx, mark) =>
             {
                 if (gameService.LocalMark == mark)

@@ -17,41 +17,38 @@ namespace TicTacToeGame.Presentation.Controllers
 
         private void Awake()
         {
-            // Подписки на сетевые события ДО подключения к серверу!
+            // Все подписки делаем ОДИН РАЗ
             networkService.JoinedRoom += () => uiManager.ShowWaitingForOpponent();
             networkService.GameStartSignal += OnGameStart;
             networkService.MoveReceived += OnRemoteMove;
 
             gameService = new GameService();
+            gameService.OnMoveProcessed += (_, _) => UpdateTurnStatus();
+            gameService.OnGameEnd += ShowEndStatus;
 
-            // Инициализация всех ячеек и привязка кликов
             foreach (var cellCtrl in boardView.CellControllers)
                 cellCtrl.Initialize(gameService, networkService, this);
 
-            // Показываем статус подключения
             uiManager.ShowConnecting();
-
-            // Запуск соединения с Photon
             networkService.Connect();
         }
 
         private void OnGameStart()
         {
-            // Выбор метки (X у MasterClient, O у второго)
+            // В начале каждой игры метку назначаем
             var localMark = PhotonNetwork.IsMasterClient ? PlayerMark.X : PlayerMark.O;
             gameService.Initialize(localMark);
             uiManager.ShowGameStarted(localMark);
-
-            // Подписка на событие хода
-            gameService.OnMoveProcessed += (_, _) => UpdateTurnStatus();
-            gameService.OnGameEnd += ShowEndStatus;
-
-            // Сразу обновляем статус хода
             UpdateTurnStatus();
         }
 
         private void UpdateTurnStatus()
         {
+            Debug.Log($"[TURN] LocalMark={gameService.LocalMark}, CurrentTurn={gameService.CurrentTurn}");
+
+            if (!gameService.IsGameActive()) // Добавь такой геттер, чтобы не показывать статус после конца игры
+                return;
+
             if (gameService.CurrentTurn == gameService.LocalMark)
                 uiManager.ShowYourTurn();
             else
@@ -61,7 +58,6 @@ namespace TicTacToeGame.Presentation.Controllers
         private void OnRemoteMove(int idx, PlayerMark mark)
         {
             gameService.ProcessRemoteMove(idx, mark);
-            // Не нужно вручную вызывать UpdateTurnStatus — оно вызовется через OnMoveProcessed
         }
 
         private void ShowEndStatus(PlayerMark? winner)
@@ -74,8 +70,7 @@ namespace TicTacToeGame.Presentation.Controllers
                 uiManager.ShowLoss();
         }
 
-
-        // Делаем метод публичным, чтобы CellController мог обновить статус мгновенно после клика
+        // Чтобы CellController мог обновить статус мгновенно после клика
         public void UpdateTurnStatusExternal()
         {
             UpdateTurnStatus();

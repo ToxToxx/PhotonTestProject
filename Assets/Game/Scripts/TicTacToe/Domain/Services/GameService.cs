@@ -6,7 +6,7 @@ namespace TicTacToeGame.Domain.Services
 {
     public class GameService : IGameService
     {
-        private readonly GameBoard board = new GameBoard();
+        private GameBoard board = new GameBoard();
         public PlayerMark LocalMark { get; private set; }
         public PlayerMark CurrentTurn { get; private set; }
         private bool gameActive = false;
@@ -14,9 +14,11 @@ namespace TicTacToeGame.Domain.Services
         public event Action OnGameStart;
         public event Action<int, PlayerMark> OnMoveProcessed;
         public event Action<PlayerMark?> OnGameEnd;
+        public bool IsGameActive() => gameActive;
 
         public void Initialize(PlayerMark localMark)
         {
+            board = new GameBoard(); // <--- сбрасываем поле для новой игры!
             LocalMark = localMark;
             CurrentTurn = PlayerMark.X;
             gameActive = true;
@@ -43,21 +45,26 @@ namespace TicTacToeGame.Domain.Services
                 return;
 
             board.Cells[index].SetMark(mark);
-            OnMoveProcessed?.Invoke(index, mark);
 
+            // --- Сначала обработать ход, только потом событие!
             if (WinConditionChecker.CheckWin(board, mark))
             {
-                gameActive = false; // <--- блокируем игру!
+                gameActive = false;
+                OnMoveProcessed?.Invoke(index, mark);
                 OnGameEnd?.Invoke(mark);
                 return;
             }
             if (WinConditionChecker.IsDraw(board))
             {
                 gameActive = false;
+                OnMoveProcessed?.Invoke(index, mark);
                 OnGameEnd?.Invoke(null);
                 return;
             }
+
             CurrentTurn = mark == PlayerMark.X ? PlayerMark.O : PlayerMark.X;
+            OnMoveProcessed?.Invoke(index, mark);
         }
+
     }
 }

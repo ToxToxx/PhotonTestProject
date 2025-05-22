@@ -50,15 +50,16 @@ namespace TicTacToeGame.Infrastructure.Network
             JoinOrCreateRoom(MaxPlayersCount);
         }
 
-        public void OnJoinedRoom()
+        // ВАЖНО: override!
+        public override void JoiningRoom()
         {
-            Debug.Log($"[PNS] JoinedRoom: {PhotonNetwork.CurrentRoom.Name} ({PhotonNetwork.CurrentRoom.PlayerCount}/{MaxPlayersCount})");
+            Debug.Log("Ты действительно в комнате!");
+            // Вся твоя логика запуска после входа в комнату — здесь.
             JoinedRoom?.Invoke();
-
-            // Если оба игрока и мы мастер — даём сигнал на старт
             if (PhotonNetwork.CurrentRoom.PlayerCount == MaxPlayersCount && PhotonNetwork.IsMasterClient)
                 SignalGameStart();
         }
+
 
         public override void OnPlayerEnteredRoom(Player newPlayer)
         {
@@ -67,7 +68,6 @@ namespace TicTacToeGame.Infrastructure.Network
                 SignalGameStart();
         }
 
-        // Сигнализируем обоим клиентам через RPC, что пора начинать
         public void SignalGameStart()
         {
             photonView.RPC(nameof(RPC_GameStart), RpcTarget.All);
