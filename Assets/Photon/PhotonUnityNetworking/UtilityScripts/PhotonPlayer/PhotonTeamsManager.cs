@@ -138,7 +138,7 @@ namespace Photon.Pun.UtilityScripts
 
         #region IMatchmakingCallbacks
 
-        void IMatchmakingCallbacks.OnJoinedRoom()
+        void IMatchmakingCallbacks.JoiningRoom()
         {
             this.UpdateTeams();
         }

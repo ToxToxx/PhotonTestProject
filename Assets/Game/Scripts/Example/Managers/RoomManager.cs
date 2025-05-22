@@ -54,7 +54,7 @@ namespace Game
             Debug.Log("Создана новая комната: " + PhotonNetwork.CurrentRoom.Name);
         }
 
-        public override void OnJoinedRoom()
+        public override void JoiningRoom()
         {
             Debug.Log($"Зашли в комнату: {PhotonNetwork.CurrentRoom.Name} " +
                       $"(Игроков в комнате: {PhotonNetwork.CurrentRoom.PlayerCount})");

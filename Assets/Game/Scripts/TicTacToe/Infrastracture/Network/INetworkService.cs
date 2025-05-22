@@ -1,7 +1,5 @@
 using System;
 using TicTacToeGame.Domain.Models;
-using UnityEngine;
-
 
 namespace TicTacToeGame.Infrastructure.Network
 {
@@ -10,7 +8,9 @@ namespace TicTacToeGame.Infrastructure.Network
         void Connect();
         void JoinOrCreateRoom(int maxPlayers);
         void SendMove(int cellIndex, PlayerMark mark);
-        event Action<int, PlayerMark> OnMoveReceived;
-        event Action OnPlayersReady;
+
+        event Action JoinedRoom;                // Вошли в комнату (может быть 1 игрок)
+        event Action GameStartSignal;           // Сигнал от мастера: стартуем игру!
+        event Action<int, PlayerMark> MoveReceived;
     }
 }

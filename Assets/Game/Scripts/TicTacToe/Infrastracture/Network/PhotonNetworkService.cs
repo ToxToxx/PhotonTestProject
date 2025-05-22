@@ -1,38 +1,83 @@
+using System;
 using Photon.Pun;
 using Photon.Realtime;
 using UnityEngine;
-using System;
 using TicTacToeGame.Domain.Models;
 using TicTacToeGame.Infrastructure.Config;
 
 namespace TicTacToeGame.Infrastructure.Network
 {
+    [RequireComponent(typeof(PhotonView))]
     public class PhotonNetworkService : MonoBehaviourPunCallbacks, INetworkService
     {
-        [SerializeField] private PhotonSettings config;
-        public event Action<int, PlayerMark> OnMoveReceived;
-        public event Action OnPlayersReady;
+        private const string RoomName = "TicTacToeRoom";
+        private const int MaxPlayersCount = 2;
 
-        void Awake()
+        [SerializeField] private PhotonSettings config;
+
+        public event Action JoinedRoom;
+        public event Action GameStartSignal;
+        public event Action<int, PlayerMark> MoveReceived;
+
+        private void Awake()
         {
+            if (config == null)
+            {
+                Debug.LogError("[PhotonNetworkService] PhotonSettings не назначен");
+                return;
+            }
+
             PhotonNetwork.PhotonServerSettings.AppSettings.AppIdRealtime = config.AppId;
             PhotonNetwork.PhotonServerSettings.AppSettings.FixedRegion = config.Region;
         }
 
-        public void Connect() => PhotonNetwork.ConnectUsingSettings();
-
-        public override void OnConnectedToMaster() => JoinOrCreateRoom(2);
+        public void Connect()
+        {
+            PhotonNetwork.ConnectUsingSettings();
+        }
 
         public void JoinOrCreateRoom(int maxPlayers)
         {
-            var opts = new RoomOptions { MaxPlayers = (byte)maxPlayers };
-            PhotonNetwork.JoinOrCreateRoom("TicTacToeRoom", opts, TypedLobby.Default);
+            PhotonNetwork.JoinOrCreateRoom(
+                RoomName,
+                new RoomOptions { MaxPlayers = (byte)maxPlayers },
+                TypedLobby.Default
+            );
         }
 
-        public override void OnJoinedRoom()
+        public override void OnConnectedToMaster()
         {
-            if (PhotonNetwork.CurrentRoom.PlayerCount == PhotonNetwork.CurrentRoom.MaxPlayers)
-                OnPlayersReady?.Invoke();
+            JoinOrCreateRoom(MaxPlayersCount);
+        }
+
+        public void OnJoinedRoom()
+        {
+            Debug.Log($"[PNS] JoinedRoom: {PhotonNetwork.CurrentRoom.Name} ({PhotonNetwork.CurrentRoom.PlayerCount}/{MaxPlayersCount})");
+            JoinedRoom?.Invoke();
+
+            // Если оба игрока и мы мастер — даём сигнал на старт
+            if (PhotonNetwork.CurrentRoom.PlayerCount == MaxPlayersCount && PhotonNetwork.IsMasterClient)
+                SignalGameStart();
+        }
+
+        public override void OnPlayerEnteredRoom(Player newPlayer)
+        {
+            Debug.Log($"[PNS] PlayerEntered: {newPlayer.NickName} ({PhotonNetwork.CurrentRoom.PlayerCount}/{MaxPlayersCount})");
+            if (PhotonNetwork.CurrentRoom.PlayerCount == MaxPlayersCount && PhotonNetwork.IsMasterClient)
+                SignalGameStart();
+        }
+
+        // Сигнализируем обоим клиентам через RPC, что пора начинать
+        public void SignalGameStart()
+        {
+            photonView.RPC(nameof(RPC_GameStart), RpcTarget.All);
+        }
+
+        [PunRPC]
+        private void RPC_GameStart()
+        {
+            Debug.Log("[PNS] Получен сигнал старта игры!");
+            GameStartSignal?.Invoke();
         }
 
         public void SendMove(int cellIndex, PlayerMark mark)
@@ -41,9 +86,9 @@ namespace TicTacToeGame.Infrastructure.Network
         }
 
         [PunRPC]
-        private void RPC_ReceiveMove(int index, int mark)
+        private void RPC_ReceiveMove(int cellIndex, int markValue)
         {
-            OnMoveReceived?.Invoke(index, (PlayerMark)mark);
+            MoveReceived?.Invoke(cellIndex, (PlayerMark)markValue);
         }
     }
 }

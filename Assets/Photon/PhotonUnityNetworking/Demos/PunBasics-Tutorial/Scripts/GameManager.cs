@@ -97,7 +97,7 @@ namespace Photon.Pun.Demo.PunBasics
 
         #region Photon Callbacks
 
-        public override void OnJoinedRoom()
+        public override void JoiningRoom()
         {
             // Note: it is possible that this monobehaviour is not created (or active) when OnJoinedRoom happens
             // due to that the Start() method also checks if the local player character was network instantiated!

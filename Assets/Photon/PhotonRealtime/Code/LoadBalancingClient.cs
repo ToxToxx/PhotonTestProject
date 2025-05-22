@@ -2519,7 +2519,7 @@ namespace Photon.Realtime
                     this.MatchMakingCallbackTargets.OnCreatedRoom();
                 }
 
-                this.MatchMakingCallbackTargets.OnJoinedRoom();
+                this.MatchMakingCallbackTargets.JoiningRoom();
             }
         }
 
@@ -3446,7 +3446,7 @@ namespace Photon.Realtime
                             this.MatchMakingCallbackTargets.OnCreatedRoom();
                         }
 
-                        this.MatchMakingCallbackTargets.OnJoinedRoom();
+                        this.MatchMakingCallbackTargets.JoiningRoom();
                     }
                     else
                     {
@@ -4041,7 +4041,7 @@ namespace Photon.Realtime
         ///
         /// If you want a match to be started "actively", enable the user to signal "ready" (using OpRaiseEvent or a Custom Property).
         /// </remarks>
-        void OnJoinedRoom();
+        void JoiningRoom();
 
         /// <summary>
         /// Called when a previous OpJoinRoom call failed on the server.
@@ -4410,13 +4410,13 @@ namespace Photon.Realtime
             }
         }
 
-        public void OnJoinedRoom()
+        public void JoiningRoom()
         {
             this.client.UpdateCallbackTargets();
 
             foreach (IMatchmakingCallbacks target in this)
             {
-                target.OnJoinedRoom();
+                target.JoiningRoom();
             }
         }
 
